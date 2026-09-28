@@ -1,0 +1,34 @@
+# ── Dependencies and build output ──────────────────────────────
+node_modules/
+react-app/dist/
+react-app/dist.zip
+
+# ── Raw photo and video libraries ──────────────────────────────
+# These are working originals, not site assets. Together they are
+# roughly 600 MB, which is far past what a Git repository should
+# carry. The processed, web-sized copies the site actually loads
+# live in assets/residences/ and assets/vehicles/ and ARE tracked.
+assets/gallery/
+event-photo-1.jpeg/
+New folder/
+
+# Large media. Keep the masters in OneDrive; if the site ever needs
+# the hero video served from here, use Git LFS rather than plain Git.
+*.MP4
+*.mp4
+*.mov
+*.MOV
+
+# Stray working files
+N.png
+
+# ── OS and editor noise ────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+*.log
+.vscode/
+.idea/
+
+# ── Local agent state ──────────────────────────────────────────
+.claude/

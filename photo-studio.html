@@ -1,0 +1,466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Photo Studio — Grassroots Residences</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400&family=Manrope:wght@200;300;400;500;600;700&display=swap">
+<style>
+:root{
+  --night:#05100F; --night-2:#0A1917; --night-3:#102725;
+  --on:#EDF3F0; --on-2:#8FA6A3; --on-3:#5C7472;
+  --teal:#3FB9BC; --lime:#B8D92E; --warn:#F2A38C;
+  --hair:rgba(237,243,240,.14);
+  --t-xs:.6875rem; --t-sm:.8125rem;
+  --ease:cubic-bezier(.22,.61,.36,1);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--night); color:var(--on);
+  font-family:"Manrope",system-ui,sans-serif; font-size:.9375rem; line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2{font-family:"Bodoni Moda",Georgia,serif;font-weight:400;letter-spacing:-.015em;line-height:1.08;margin:0}
+p{margin:0}
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:clamp(18px,4vw,44px)}
+.kick{
+  font-size:var(--t-xs);font-weight:700;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--lime);display:inline-flex;align-items:center;gap:10px
+}
+.kick::before{content:"";width:5px;height:5px;border-radius:50%;background:var(--lime)}
+
+header{border-bottom:1px solid var(--hair);padding-block:34px 30px}
+header h1{font-size:clamp(1.875rem,4vw,2.75rem);margin-top:16px}
+header p.sub{color:var(--on-2);font-weight:200;margin-top:14px;max-width:62ch}
+
+.step{border-bottom:1px solid var(--hair);padding-block:clamp(28px,4vw,44px)}
+.step-n{
+  font-size:var(--t-xs);font-weight:700;letter-spacing:.24em;text-transform:uppercase;color:var(--on-3)
+}
+.step h2{font-size:1.5rem;margin-top:10px}
+.step .hint{color:var(--on-2);font-weight:200;font-size:var(--t-sm);margin-top:8px;max-width:70ch}
+
+/* drop zone */
+.drop{
+  margin-top:24px;border:1.5px dashed rgba(237,243,240,.28);
+  padding:clamp(30px,5vw,58px) 24px;text-align:center;cursor:pointer;
+  transition:border-color .3s var(--ease),background .3s var(--ease);
+}
+.drop:hover,.drop.hot{border-color:var(--lime);background:rgba(184,217,46,.06)}
+.drop h3{font-family:"Bodoni Moda",serif;font-size:1.5rem;font-weight:400;margin:0 0 8px}
+.drop p{color:var(--on-2);font-size:var(--t-sm);font-weight:200}
+.drop input{display:none}
+
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center;margin-top:20px}
+
+label.fld{display:grid;gap:7px}
+label.fld span{font-size:var(--t-xs);letter-spacing:.2em;text-transform:uppercase;font-weight:700;color:var(--on-3)}
+select,input[type=text]{
+  font:inherit;font-size:var(--t-sm);color:var(--on);background:var(--night-2);
+  border:1px solid var(--hair);padding:11px 13px;border-radius:0;min-width:240px
+}
+select:focus,input:focus{outline:none;border-color:var(--lime)}
+select option{background:var(--night-2)}
+
+.btn{
+  font-size:var(--t-xs);font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  padding:14px 26px;border:1px solid var(--on);background:var(--on);color:var(--night);
+  cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:9px;
+  transition:background .3s var(--ease),color .3s var(--ease),border-color .3s var(--ease)
+}
+.btn:hover{background:var(--teal);border-color:var(--teal);color:#04100E}
+.btn.lime{background:var(--lime);border-color:var(--lime);color:#0B1405}
+.btn.lime:hover{background:var(--teal);border-color:var(--teal);color:#04100E}
+.btn.ghost{background:transparent;color:var(--on);border-color:var(--hair)}
+.btn.ghost:hover{background:transparent;border-color:var(--lime);color:var(--lime)}
+.btn.sm{padding:9px 16px}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn:disabled:hover{background:var(--on);border-color:var(--on);color:var(--night)}
+
+/* thumbnails */
+.shelf{display:grid;grid-template-columns:repeat(auto-fill,minmax(178px,1fr));gap:14px;margin-top:26px}
+.shot{border:1px solid var(--hair);background:var(--night-2);display:flex;flex-direction:column}
+.shot .pic{position:relative;aspect-ratio:4/3;overflow:hidden;background:var(--night-3)}
+.shot .pic img{width:100%;height:100%;object-fit:cover;display:block}
+.shot .tag{
+  position:absolute;left:8px;top:8px;background:var(--lime);color:#0B1405;
+  font-size:.625rem;font-weight:700;letter-spacing:.12em;padding:3px 7px;text-transform:uppercase
+}
+.shot .meta{padding:10px 11px;font-size:.6875rem;color:var(--on-2);font-weight:300;line-height:1.5}
+.shot .meta b{color:var(--on);font-weight:600;display:block;word-break:break-all;font-size:.6875rem}
+.shot .saved{color:var(--lime)}
+.shot .ctl{display:flex;border-top:1px solid var(--hair)}
+.shot .ctl button{
+  flex:1;background:none;border:0;border-right:1px solid var(--hair);
+  color:var(--on-2);font-size:.6875rem;font-weight:700;letter-spacing:.08em;
+  padding:9px 4px;cursor:pointer;text-transform:uppercase
+}
+.shot .ctl button:last-child{border-right:0}
+.shot .ctl button:hover{color:var(--lime);background:rgba(184,217,46,.08)}
+.shot .ctl button.del:hover{color:var(--warn);background:rgba(242,163,140,.08)}
+
+.empty{color:var(--on-3);font-size:var(--t-sm);font-weight:200;margin-top:22px}
+
+/* output */
+pre.out{
+  margin-top:20px;background:var(--night-2);border:1px solid var(--hair);
+  padding:18px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.75rem;
+  line-height:1.7;white-space:pre-wrap;word-break:break-all;
+  max-height:320px;overflow:auto;color:var(--on-2)
+}
+.note{
+  margin-top:16px;padding:14px 16px;border-left:2px solid var(--teal);
+  background:rgba(63,185,188,.07);font-size:var(--t-sm);font-weight:300;color:var(--on-2)
+}
+.note b{color:var(--on);font-weight:600}
+.bar{
+  height:3px;background:var(--night-3);margin-top:18px;overflow:hidden;display:none
+}
+.bar.on{display:block}
+.bar i{display:block;height:100%;background:var(--lime);width:0;transition:width .2s linear}
+.stat{font-size:var(--t-sm);color:var(--on-2);font-weight:200;margin-top:12px}
+.stat b{color:var(--lime);font-weight:600}
+footer{padding-block:40px 56px;color:var(--on-3);font-size:var(--t-xs);letter-spacing:.06em}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <p class="kick">Grassroots Residences</p>
+    <h1>Photo Studio</h1>
+    <p class="sub">
+      Drop your property photos in. They are shrunk to web size in your browser —
+      nothing is uploaded anywhere — then you get the files to save and the one line
+      of code that puts them on the site.
+    </p>
+  </div>
+</header>
+
+<section class="step">
+  <div class="wrap">
+    <p class="step-n">Step 1</p>
+    <h2>Choose the residence</h2>
+    <p class="hint">Every photo you add next belongs to this residence. Change it and add more for the next one.</p>
+    <div class="row">
+      <label class="fld">
+        <span>Residence</span>
+        <select id="res"></select>
+      </label>
+    </div>
+  </div>
+</section>
+
+<section class="step">
+  <div class="wrap">
+    <p class="step-n">Step 2</p>
+    <h2>Add the photos</h2>
+    <p class="hint">
+      Drag them in, or click to browse. Straight off your phone is fine — big files are
+      shrunk automatically. The first photo becomes the main image on the card and the
+      page header, so lead with your strongest shot.
+    </p>
+
+    <div class="drop" id="drop">
+      <input type="file" id="file" accept="image/*" multiple>
+      <h3>Drop photos here</h3>
+      <p>or click to browse — JPG, PNG or HEIC from a phone</p>
+    </div>
+
+    <div class="bar" id="bar"><i id="barFill"></i></div>
+    <p class="stat" id="stat"></p>
+
+    <div class="shelf" id="shelf"></div>
+    <p class="empty" id="empty">No photos yet.</p>
+  </div>
+</section>
+
+<section class="step">
+  <div class="wrap">
+    <p class="step-n">Step 3</p>
+    <h2>Save the optimised files</h2>
+    <p class="hint">
+      This downloads the shrunk copies. Put them in your project at
+      <b style="color:var(--on)">assets/residences/</b> — create that folder if it is not there yet.
+    </p>
+    <div class="row">
+      <button class="btn lime" id="dl" disabled>Download photos</button>
+      <span class="stat" id="dlNote"></span>
+    </div>
+  </div>
+</section>
+
+<section class="step">
+  <div class="wrap">
+    <p class="step-n">Step 4</p>
+    <h2>Copy the code</h2>
+    <p class="hint">
+      Paste this to Claude, or into <b style="color:var(--on)">grassroots-stays.html</b> —
+      find the residence in the RESIDENCES list and replace its <code>photos: []</code> line.
+    </p>
+    <div class="row">
+      <button class="btn" id="copyPaths" disabled>Copy code</button>
+      <button class="btn ghost" id="copyEmbed" disabled>Copy embedded version</button>
+      <span class="stat" id="copyNote"></span>
+    </div>
+    <pre class="out" id="out">Add photos above and the code appears here.</pre>
+    <div class="note">
+      <b>Which button?</b> Use <b>Copy code</b> for the real website — the photos load from
+      the files you saved in Step 3, which is how every website does it.
+      Use <b>Copy embedded version</b> only for the shareable claude.ai preview link, which
+      cannot read files from your computer. The embedded version makes a much larger file.
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Everything happens inside this page on your own computer. No photo is sent anywhere.
+  </div>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════
+   Residences — slugs match grassroots-stays.html
+   ═══════════════════════════════════════════════════════════════ */
+const RESIDENCES = [
+  ["east-legon-pool-house",  "East Legon Pool House — Accra (live)"],
+  ["cantonments-penthouse",  "Cantonments Penthouse — Accra"],
+  ["aburi-cloud-villa",      "Aburi Cloud Villa — Eastern Region"],
+  ["labadi-beach-residence", "Labadi Beach Residence — Accra"],
+  ["ada-lagoon-lodge",       "Ada Lagoon Lodge — Greater Accra"],
+  ["elmina-coast-house",     "Elmina Coast House — Central Region"],
+  ["busua-surf-house",       "Busua Surf House — Western Region"],
+  ["nhyiaeso-garden-suite",  "Nhyiaeso Garden Suite — Kumasi"]
+];
+
+const MAX_EDGE = 1920;   /* long edge in pixels — plenty for a full-bleed hero */
+const QUALITY  = 0.82;   /* JPEG quality: the point where bigger stops looking better */
+const FOLDER   = "assets/residences/";
+
+const $ = (id) => document.getElementById(id);
+const kb = (n) => n < 1024 * 1024
+  ? (n / 1024).toFixed(0) + " KB"
+  : (n / 1048576).toFixed(1) + " MB";
+
+let shots = [];   /* {name, blob, url, before, after, slug} */
+
+$("res").innerHTML = RESIDENCES.map(([s, l]) => `<option value="${s}">${l}</option>`).join("");
+
+/* ── intake ──────────────────────────────────────────────────── */
+const drop = $("drop"), fileInput = $("file");
+
+drop.addEventListener("click", () => fileInput.click());
+fileInput.addEventListener("change", (e) => intake([...e.target.files]));
+
+["dragenter", "dragover"].forEach(t =>
+  drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.add("hot"); }));
+["dragleave", "drop"].forEach(t =>
+  drop.addEventListener(t, (e) => { e.preventDefault(); drop.classList.remove("hot"); }));
+drop.addEventListener("drop", (e) => intake([...e.dataTransfer.files]));
+
+async function intake(files) {
+  const imgs = files.filter(f => f.type.startsWith("image/"));
+  if (!imgs.length) { $("stat").textContent = "Those were not images."; return; }
+
+  const slug = $("res").value;
+  $("bar").classList.add("on");
+  let done = 0;
+
+  for (const f of imgs) {
+    try {
+      const out = await shrink(f);
+      const idx = shots.filter(s => s.slug === slug).length + 1;
+      shots.push({
+        slug,
+        name: `${slug}-${String(idx).padStart(2, "0")}.jpg`,
+        blob: out.blob,
+        url: URL.createObjectURL(out.blob),
+        before: f.size,
+        after: out.blob.size
+      });
+    } catch (err) {
+      $("stat").innerHTML = `Could not read <b>${f.name}</b> — try saving it as a JPG first.`;
+    }
+    done++;
+    $("barFill").style.width = (done / imgs.length * 100) + "%";
+    paint();
+  }
+
+  setTimeout(() => { $("bar").classList.remove("on"); $("barFill").style.width = "0"; }, 500);
+  fileInput.value = "";
+  summarise();
+}
+
+/* draw the photo onto a canvas at web size, then re-encode as JPEG */
+async function shrink(file) {
+  let bmp;
+  try {
+    /* honours the phone's rotation flag, so nothing lands sideways */
+    bmp = await createImageBitmap(file, { imageOrientation: "from-image" });
+  } catch {
+    bmp = await new Promise((res, rej) => {
+      const i = new Image();
+      i.onload = () => res(i);
+      i.onerror = rej;
+      i.src = URL.createObjectURL(file);
+    });
+  }
+
+  const w = bmp.width, h = bmp.height;
+  const scale = Math.min(1, MAX_EDGE / Math.max(w, h));
+  const cw = Math.round(w * scale), ch = Math.round(h * scale);
+
+  const c = document.createElement("canvas");
+  c.width = cw; c.height = ch;
+  const ctx = c.getContext("2d");
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(bmp, 0, 0, cw, ch);
+
+  const blob = await new Promise(r => c.toBlob(r, "image/jpeg", QUALITY));
+  return { blob, cw, ch };
+}
+
+/* ── shelf ───────────────────────────────────────────────────── */
+function paint() {
+  $("empty").style.display = shots.length ? "none" : "block";
+
+  $("shelf").innerHTML = shots.map((s, i) => {
+    const firstOfRes = shots.findIndex(x => x.slug === s.slug) === i;
+    const pct = Math.max(0, Math.round((1 - s.after / s.before) * 100));
+    return `<div class="shot">
+      <div class="pic">
+        <img src="${s.url}" alt="">
+        ${firstOfRes ? `<span class="tag">Main</span>` : ""}
+      </div>
+      <div class="meta">
+        <b>${s.name}</b>
+        ${kb(s.before)} → ${kb(s.after)}
+        ${pct > 0 ? `<span class="saved">(${pct}% smaller)</span>` : ""}
+      </div>
+      <div class="ctl">
+        <button type="button" data-up="${i}" title="Move earlier">←</button>
+        <button type="button" data-down="${i}" title="Move later">→</button>
+        <button type="button" class="del" data-del="${i}" title="Remove">Remove</button>
+      </div>
+    </div>`;
+  }).join("");
+
+  const has = shots.length > 0;
+  ["dl", "copyPaths", "copyEmbed"].forEach(id => $(id).disabled = !has);
+  writeOut();
+}
+
+$("shelf").addEventListener("click", (e) => {
+  const b = e.target.closest("button"); if (!b) return;
+  const { up, down, del } = b.dataset;
+
+  if (del !== undefined) {
+    URL.revokeObjectURL(shots[+del].url);
+    shots.splice(+del, 1);
+  } else if (up !== undefined && +up > 0) {
+    const i = +up; [shots[i - 1], shots[i]] = [shots[i], shots[i - 1]];
+  } else if (down !== undefined && +down < shots.length - 1) {
+    const i = +down; [shots[i + 1], shots[i]] = [shots[i], shots[i + 1]];
+  } else return;
+
+  renumber();
+  paint();
+  summarise();
+});
+
+/* keep filenames in step with the order shown */
+function renumber() {
+  const seen = {};
+  shots.forEach(s => {
+    seen[s.slug] = (seen[s.slug] || 0) + 1;
+    s.name = `${s.slug}-${String(seen[s.slug]).padStart(2, "0")}.jpg`;
+  });
+}
+
+function summarise() {
+  if (!shots.length) { $("stat").textContent = ""; return; }
+  const before = shots.reduce((a, s) => a + s.before, 0);
+  const after = shots.reduce((a, s) => a + s.after, 0);
+  const pct = Math.max(0, Math.round((1 - after / before) * 100));
+  $("stat").innerHTML = `${shots.length} photo${shots.length === 1 ? "" : "s"} ready — ` +
+    `${kb(before)} of originals became <b>${kb(after)}</b>${pct > 0 ? ` (${pct}% smaller)` : ""}.`;
+}
+
+/* ── code output ─────────────────────────────────────────────── */
+function grouped() {
+  const g = {};
+  shots.forEach(s => (g[s.slug] = g[s.slug] || []).push(s));
+  return g;
+}
+
+function writeOut() {
+  if (!shots.length) { $("out").textContent = "Add photos above and the code appears here."; return; }
+  const g = grouped();
+  $("out").textContent = Object.entries(g).map(([slug, list]) => {
+    const label = (RESIDENCES.find(r => r[0] === slug) || [, slug])[1];
+    return `/* ${label} */\nphotos: [\n` +
+      list.map(s => `  "${FOLDER}${s.name}"`).join(",\n") + `\n],`;
+  }).join("\n\n");
+}
+
+$("copyPaths").addEventListener("click", () => copy($("out").textContent, "Code copied."));
+
+$("copyEmbed").addEventListener("click", async () => {
+  $("copyNote").textContent = "Encoding…";
+  const g = grouped();
+  const parts = [];
+  for (const [slug, list] of Object.entries(g)) {
+    const label = (RESIDENCES.find(r => r[0] === slug) || [, slug])[1];
+    const uris = [];
+    for (const s of list) uris.push(await toDataURI(s.blob));
+    parts.push(`/* ${label} */\nphotos: [\n` + uris.map(u => `  "${u}"`).join(",\n") + `\n],`);
+  }
+  const text = parts.join("\n\n");
+  copy(text, `Embedded version copied — ${kb(new Blob([text]).size)} of code.`);
+});
+
+const toDataURI = (blob) => new Promise((res) => {
+  const r = new FileReader();
+  r.onload = () => res(r.result);
+  r.readAsDataURL(blob);
+});
+
+async function copy(text, msg) {
+  try {
+    await navigator.clipboard.writeText(text);
+    $("copyNote").textContent = msg;
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); $("copyNote").textContent = msg; }
+    catch { $("copyNote").textContent = "Could not copy — select the text above instead."; }
+    ta.remove();
+  }
+  setTimeout(() => ($("copyNote").textContent = ""), 4000);
+}
+
+/* ── download ────────────────────────────────────────────────── */
+$("dl").addEventListener("click", async () => {
+  $("dlNote").textContent = "Saving…";
+  for (let i = 0; i < shots.length; i++) {
+    const a = document.createElement("a");
+    a.href = shots[i].url;
+    a.download = shots[i].name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    /* browsers drop downloads fired too close together */
+    await new Promise(r => setTimeout(r, 320));
+  }
+  $("dlNote").innerHTML = `Saved ${shots.length} file${shots.length === 1 ? "" : "s"} — ` +
+    `move them into <b style="color:var(--on)">${FOLDER}</b>`;
+});
+
+paint();
+</script>
+</body>
+</html>
