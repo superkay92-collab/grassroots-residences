@@ -14,20 +14,32 @@ changes hands on the site.
 
 | Path | What it is |
 | --- | --- |
-| `grassroots-stays.html` | **The site.** One self-contained file — markup, styles, logic and every photograph embedded as a data URI. Opens from disk, from a shared link or from any host, with no build step and no server. |
+| `index.html` | **The site.** One self-contained file — markup, styles, logic and every photograph embedded as a data URI. Opens from disk, from a shared link or from any host, with no build step and no server. It sits at the repository root because that is what GitHub Pages serves. |
 | `photo-studio.html` | A standalone tool for preparing photographs. Drag images in; it resizes them, fixes EXIF rotation, names them by slug and gives you either file paths or ready-to-paste embedded versions. |
 | `assets/residences/` | The 16 processed residence photographs, web-sized. |
 | `assets/vehicles/` | The 11 processed vehicle photographs, web-sized. |
-| `index.html`, `styles.css`, `script.js`, `brand.css` | The earlier static Grassroots Networking page. |
+| `legacy/` | The earlier static Grassroots Networking page and its stylesheet, script and brand file. Kept for reference. It will not render correctly from this repository, because the gallery photographs it loads are excluded — see below. |
 | `react-app/src/` | A React version of the Grassroots Networking welcome page. |
 
-`grassroots-stays.html` already contains its own copies of everything in
-`assets/`. The loose files are kept so the images can be split out and lazy
-loaded when the site moves to a real domain.
+`index.html` already contains its own copies of everything in `assets/`. The
+loose files are kept so the images can be split out and lazy loaded if the page
+ever needs to get lighter.
 
 ## Running it
 
-Open `grassroots-stays.html` in a browser. That is the whole procedure.
+Open `index.html` in a browser. That is the whole procedure.
+
+## Hosting
+
+Published with GitHub Pages from `main`, served from the repository root. Because
+the page is self-contained, deploying is just the push — there is no build step
+and nothing to configure.
+
+To put a custom domain in front of it, add the domain in **Settings → Pages**,
+then at the registrar create a `CNAME` for `www` pointing at
+`superkay92-collab.github.io`, and for the bare domain four `A` records pointing
+at `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`.
+GitHub issues the certificate once DNS resolves.
 
 The React page needs a server:
 
